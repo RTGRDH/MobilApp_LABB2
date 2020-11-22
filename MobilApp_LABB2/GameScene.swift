@@ -22,7 +22,7 @@ class GameScene: SKScene {
      * 21           18           15
      *
      */
-    
+    var emptyNodes = [SKNode]()
     override func didMove(to view: SKView) {
         
     }
