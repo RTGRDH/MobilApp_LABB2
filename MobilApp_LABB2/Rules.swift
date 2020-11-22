@@ -41,7 +41,7 @@ class NineMenMorrisRules {
     /**
      * Returns true if a move is successful
      */
-    func  legalMove(To : Int, From : Int, color : Int) -> Bool{
+    func legalMove(To : Int, From : Int, color : Int) -> Bool{
         if (color == turn) {
             if (turn == NineMenMorrisRules.RED_MOVES) {
                 if (redmarker >= 0) {
