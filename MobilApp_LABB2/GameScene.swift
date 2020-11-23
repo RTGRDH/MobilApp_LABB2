@@ -51,11 +51,28 @@ class GameScene: SKScene {
                 blueIsPressed = true
                 bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
                 bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
-            }else if(game.whosTurn() == 2 && touchedNode.name == "redPlayer"){
+                /*
+                 Testcase for copying markers
+                 */
+                if(game.getBlueMarkersLeft() >= 0)
+                {
+                    let bluePlayercpy = bluePlayer.copy() as! SKSpriteNode
+                    addChild(bluePlayercpy)
+                }
+            }
+            else if(game.whosTurn() == 2 && touchedNode.name == "redPlayer"){
                 let location = touch.location(in: self)
                 redIsPressed = true
                 redPlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
                 redPlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+                /*
+                 Testcase for copying markers
+                 */
+                if(game.getRedMarkersLeft() >= 0)
+                {
+                    let redPlayercpy = redPlayer.copy() as! SKSpriteNode
+                    addChild(redPlayercpy)
+                }
             }
         }
     }
