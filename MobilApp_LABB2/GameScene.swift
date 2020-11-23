@@ -26,6 +26,8 @@ class GameScene: SKScene {
     var bluePlayer = SKSpriteNode()
     var redPlayer = SKSpriteNode()
     let game = NineMenMorrisRules()
+    var blueMarkersLeft = SKLabelNode()
+    var redMarkersLeft = SKLabelNode()
     
     var blueIsPressed = false
     var redIsPressed = false
@@ -36,6 +38,10 @@ class GameScene: SKScene {
         {
             emptyNodes.append(self.childNode(withName: String(node))!)
         }
+        blueMarkersLeft = self.childNode(withName: "blueMarkersLeft") as! SKLabelNode
+        redMarkersLeft = self.childNode(withName: "redMarkersLeft") as! SKLabelNode
+        blueMarkersLeft.text = "9"
+        redMarkersLeft.text = "9"
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
@@ -94,5 +100,7 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        blueMarkersLeft.text = String(game.getBlueMarkersLeft())
+        redMarkersLeft.text = String(game.getRedMarkersLeft())
     }
 }

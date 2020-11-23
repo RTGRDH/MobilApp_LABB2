@@ -41,7 +41,14 @@ class NineMenMorrisRules {
     func whosTurn() -> Int {
         return turn
     }
-
+    
+    func getBlueMarkersLeft() -> Int{
+        return bluemarker
+    }
+    
+    func getRedMarkersLeft() -> Int{
+        return redmarker
+    }
     /**
      * Returns true if a move is successful
      */
