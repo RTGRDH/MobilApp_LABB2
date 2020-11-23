@@ -70,6 +70,7 @@ class NineMenMorrisRules {
                     let valid = isValidMove(to: To, from: From);
                     if (valid == true) {
                         gameplan[To] = NineMenMorrisRules.RED_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.BLUE_MOVES;
                         return true;
                     } else {
@@ -91,6 +92,7 @@ class NineMenMorrisRules {
                     let valid = isValidMove(to: To, from: From);
                     if (valid == true) {
                         gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.RED_MOVES;
                         return true;
                     } else {
@@ -259,9 +261,25 @@ class NineMenMorrisRules {
     }
     
     func printBoard() -> Void{
-        for n in gameplan{
-            print(n)
-        }
+        print("     ",gameplan[2], " ", gameplan[5], " ", gameplan[8])
+        print("     ",gameplan[1], " ", gameplan[4], " ", gameplan[7])
+        print("     ",gameplan[0], " ", gameplan[3], " ", gameplan[6])
+        print(gameplan[23], " ", gameplan[22], " ", gameplan[21], " ", gameplan[9], " ", gameplan[10], " ", gameplan[11])
+        print("     ",gameplan[18], " ", gameplan[15], " ", gameplan[12])
+        print("     ",gameplan[19], " ", gameplan[16], " ", gameplan[13])
+        print("     ",gameplan[20], " ", gameplan[17], " ", gameplan[14])
+        print()
     }
-    
+    /*
+     * The game board positions
+     *
+     * 03           06           09
+     *     02       05       08
+     *         01   04   07
+     * 24  23  22        10  11  12
+     *         19   16   13
+     *     20       17       14
+     * 21           18           15
+     *
+     */
 }
