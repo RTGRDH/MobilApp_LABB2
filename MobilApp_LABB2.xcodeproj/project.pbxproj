@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6979C88F256ACA4F00B62832 /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6979C88E256ACA4F00B62832 /* Rules.swift */; };
+		6979C894256B39BD00B62832 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6979C893256B39BD00B62832 /* Launch Screen.storyboard */; };
 		A7141880256ABE570069EAC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A714187F256ABE570069EAC7 /* AppDelegate.swift */; };
 		A7141882256ABE570069EAC7 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A7141881256ABE570069EAC7 /* GameScene.sks */; };
 		A7141884256ABE570069EAC7 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = A7141883256ABE570069EAC7 /* Actions.sks */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		6979C88E256ACA4F00B62832 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
+		6979C893256B39BD00B62832 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A714187C256ABE570069EAC7 /* MobilApp_LABB2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobilApp_LABB2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A714187F256ABE570069EAC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7141881256ABE570069EAC7 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				A714188C256ABE5B0069EAC7 /* Assets.xcassets */,
 				A714188E256ABE5B0069EAC7 /* Info.plist */,
 				6979C88E256ACA4F00B62832 /* Rules.swift */,
+				6979C893256B39BD00B62832 /* Launch Screen.storyboard */,
 			);
 			path = MobilApp_LABB2;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				A714188B256ABE570069EAC7 /* Main.storyboard in Resources */,
 				A7141882256ABE570069EAC7 /* GameScene.sks in Resources */,
 				A714188D256ABE5B0069EAC7 /* Assets.xcassets in Resources */,
+				6979C894256B39BD00B62832 /* Launch Screen.storyboard in Resources */,
 				A7141884256ABE570069EAC7 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
