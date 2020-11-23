@@ -33,8 +33,10 @@ class NineMenMorrisRules {
 
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
-        bluemarker = 9;
-        redmarker = 9;
+        bluemarker = 3
+        redmarker = 3
+        //bluemarker = 9;
+        //redmarker = 9;
         turn = NineMenMorrisRules.BLUE_MOVES;
     }
     
@@ -55,7 +57,7 @@ class NineMenMorrisRules {
     func legalMove(To : Int, From : Int, color : Int) -> Bool{
         if (color == turn) {
             if (turn == NineMenMorrisRules.RED_MOVES) {
-                if (redmarker >= 0) {
+                if (redmarker > 0) {
                     if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
                         gameplan[To] = NineMenMorrisRules.RED_MARKER;
                         self.redmarker-=1;
@@ -77,7 +79,7 @@ class NineMenMorrisRules {
                     return false;
                 }
             } else {
-                if (bluemarker >= 0) {
+                if (bluemarker > 0) {
                     if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
                         gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
                         bluemarker-=1;
