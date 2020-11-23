@@ -22,6 +22,7 @@ class GameScene: SKScene {
      * 21           18           15
      *
      */
+    var board = SKSpriteNode(imageNamed: "board")
     var emptyNodes:[SKNode] = [SKNode]()
     var bluePlayer = SKSpriteNode()
     var redPlayer = SKSpriteNode()
@@ -43,10 +44,10 @@ class GameScene: SKScene {
         let x: CGFloat
         let y: CGFloat
     }
-    
     var blueStart = startPos(x: 0.0, y: 0.0)
     var redStart = startPos(x: 0.0, y: 0.0)
     override func didMove(to view: SKView) {
+        self.board.size = self.frame.size
         bluePlayer = self.childNode(withName: "bluePlayer") as! SKSpriteNode
         redPlayer = self.childNode(withName: "redPlayer") as! SKSpriteNode
         whosTurnLabel = self.childNode(withName: "whosTurn") as! SKLabelNode
