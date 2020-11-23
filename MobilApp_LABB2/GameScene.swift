@@ -66,28 +66,30 @@ class GameScene: SKScene {
         game.printBoard()
         for touch in touches{
             let location = touch.location(in: self)
-            if(letBlueRemove){
-                let touchedNode = self.atPoint(touch.location(in: self))
-                if(touchedNode.name?.dropFirst(2) == "R"){
-                    let remove = Int(touchedNode.name!.dropLast())!
-                    if(game.remove(From: remove, color: NineMenMorrisRules.RED_MARKER)){
-                        let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
-                        let removedPiece = redPlaced[index!]
-                        removedPiece.removeFromParent()
-                        redPlaced.remove(at: index!)
-                        letBlueRemove = false
+            if(letBlueRemove || letRedRemove){
+                if(letBlueRemove){
+                    let touchedNode = self.atPoint(touch.location(in: self))
+                    if(touchedNode.name?.dropFirst(2) == "R"){
+                        let remove = Int(touchedNode.name!.dropLast())!
+                        if(game.remove(From: remove, color: NineMenMorrisRules.RED_MARKER)){
+                            let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
+                            let removedPiece = redPlaced[index!]
+                            removedPiece.removeFromParent()
+                            redPlaced.remove(at: index!)
+                            letBlueRemove = false
+                        }
                     }
-                }
-            }else if(letRedRemove){
-                let touchedNode = self.atPoint(touch.location(in: self))
-                if(touchedNode.name?.dropFirst(2) == "B"){
-                    let remove = Int(touchedNode.name!.dropLast())!
-                    if(game.remove(From: remove, color: NineMenMorrisRules.BLUE_MARKER)){
-                        let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
-                        let removedPiece = bluePlaced[index!]
-                        removedPiece.removeFromParent()
-                        bluePlaced.remove(at: index!)
-                        letRedRemove = false
+                }else if(letRedRemove){
+                    let touchedNode = self.atPoint(touch.location(in: self))
+                    if(touchedNode.name?.dropFirst(2) == "B"){
+                        let remove = Int(touchedNode.name!.dropLast())!
+                        if(game.remove(From: remove, color: NineMenMorrisRules.BLUE_MARKER)){
+                            let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
+                            let removedPiece = bluePlaced[index!]
+                            removedPiece.removeFromParent()
+                            bluePlaced.remove(at: index!)
+                            letRedRemove = false
+                        }
                     }
                 }
             }else{
@@ -98,7 +100,6 @@ class GameScene: SKScene {
                         bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
                         bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
                     }else if(game.whosTurn() == 2 && touchedNode.name == "redPlayer"){
-                        let location = touch.location(in: self)
                         redIsPressed = true
                         redPlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
                         redPlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
@@ -106,10 +107,12 @@ class GameScene: SKScene {
                 }else{
                     let touchedNode = self.atPoint(touch.location(in: self))
                     if(game.whosTurn() == 1 && touchedNode.name?.dropFirst(2) == "B"){
+                        blueIsPressed = true
                         let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
                         bluePlaced[index!].run(SKAction.moveTo(x: location.x, duration: 0.0))
                         bluePlaced[index!].run(SKAction.moveTo(y: location.y, duration: 0.0))
                     }else if(game.whosTurn() == 2 && touchedNode.name?.dropFirst(2) == "R"){
+                        redIsPressed = true
                         let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
                         redPlaced[index!].run(SKAction.moveTo(x: location.x, duration: 0.0))
                         redPlaced[index!].run(SKAction.moveTo(y: location.y, duration: 0.0))
@@ -135,13 +138,15 @@ class GameScene: SKScene {
                 if(game.whosTurn() == 1 && touchedNode.name?.dropFirst(2) == "B"){
                     blueIsPressed = true
                     let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
-                    bluePlaced[index!].run(SKAction.moveTo(x: location.x, duration: 0.0))
-                    bluePlaced[index!].run(SKAction.moveTo(y: location.y, duration: 0.0))
+                    let blue = bluePlaced[index!]
+                    blue.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                    blue.run(SKAction.moveTo(y: location.y, duration: 0.0))
                 }else if(game.whosTurn() == 2 && touchedNode.name?.dropFirst(2) == "R"){
                     redIsPressed = true
                     let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
-                    redPlaced[index!].run(SKAction.moveTo(x: location.x, duration: 0.0))
-                    redPlaced[index!].run(SKAction.moveTo(y: location.y, duration: 0.0))
+                    let red = redPlaced[index!]
+                    red.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                    red.run(SKAction.moveTo(y: location.y, duration: 0.0))
                 }
             }
         }
@@ -165,12 +170,10 @@ class GameScene: SKScene {
                                 }else{
                                     blueIsPressed = false
                                     moveBlueToStart()
-                                    break
                                 }
                             }else{
                                 blueIsPressed = false
                                 moveBlueToStart()
-                                break
                             }
                         }else if(redIsPressed){
                             if(isNearNode(player: redPlayer, node: node)){
@@ -186,12 +189,10 @@ class GameScene: SKScene {
                                 }else{
                                     redIsPressed = false
                                     moveRedToStart()
-                                    break
                                 }
                             }else{
                                 redIsPressed = false
                                 moveRedToStart()
-                                break
                             }
                         }
                     }
@@ -201,6 +202,7 @@ class GameScene: SKScene {
                                 if(game.legalMove(To: Int(node.name!)!, From: 25, color: NineMenMorrisRules.BLUE_MOVES)){
                                     let placed = bluePlayer.copy() as! SKSpriteNode
                                     placed.name = node.name! + "B"
+                                    print(placed.name!)
                                     addChild(placed)
                                     bluePlaced.append(placed)
                                     bluePlaced.last?.run(SKAction.moveTo(x: node.position.x, duration: 0.0))
@@ -241,48 +243,86 @@ class GameScene: SKScene {
                     }
                 }
             }else{
+                print("Alla har blivit lagda")
                 if(blueIsPressed){
+                    print("Blå är tryckt")
                     let touchedNode = self.atPoint(touch.location(in: self))
                     if(touchedNode.name?.dropFirst(2) == "B"){
+                        print("Vi har klickat på en blå nod")
                         let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
                         for node in emptyNodes{
                             if(node.name == "23"){
                                 let from = Int((bluePlaced[index!].name?.dropLast())!)!
                                 if(isNearNodeArr(placed: bluePlaced, index: index!, node: node)){
-                                    if(game.legalMove(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.BLUE_MOVES)){
-                                        blueIsPressed = false
-                                        bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
-                                        bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
-                                    }else{
-                                        moveToRecentNode(placed: bluePlaced, index: index!)
-                                        blueIsPressed = false
-                                        break
+                                    if(game.getActiveBlues() >= 4){
+                                        if(game.legalMove(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.BLUE_MOVES)){
+                                            blueIsPressed = false
+                                            bluePlaced[index!].name = node.name! + "B"
+                                            bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                            bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                            if(game.remove(to: Int(node.name!)!)){
+                                                print("MILL BLÅ")
+                                                letBlueRemove = true
+                                            }
+                                        }else{
+                                            moveToRecentNode(placed: bluePlaced, index: index!)
+                                            blueIsPressed = false
+                                        }
+                                    }else if(game.getActiveBlues() == 3){
+                                        if(game.legalMoveFreely(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.BLUE_MOVES)){
+                                            blueIsPressed = false
+                                            bluePlaced[index!].name = node.name! + "B"
+                                            bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                            bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                        }else{
+                                            moveToRecentNode(placed: bluePlaced, index: index!)
+                                            blueIsPressed = false
+                                        }
                                     }
                                 }else{
                                     blueIsPressed = false
                                     moveToRecentNode(placed: bluePlaced, index: index!)
-                                    break
                                 }
                             }
                             if(isNearNodeArr(placed: bluePlaced, index: index!, node: node)){
-                                if(game.legalMove(To: Int(node.name!)!, From: Int((bluePlaced[index!].name?.dropLast())!)!, color: NineMenMorrisRules.BLUE_MOVES)){
-                                    blueIsPressed = false
-                                    bluePlaced[index!].name = node.name! + "B"
-                                    bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
-                                    bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
-                                    if(game.remove(to: Int(node.name!)!)){
-                                        print("MILL BLÅ")
-                                        letBlueRemove = true
+                                print("Blå är nära en ny nod")
+                                if(game.getActiveBlues() >= 4){
+                                    if(game.legalMove(To: Int(node.name!)!, From: Int((bluePlaced[index!].name?.dropLast())!)!, color: NineMenMorrisRules.BLUE_MOVES)){
+                                        blueIsPressed = false
+                                        bluePlaced[index!].name = node.name! + "B"
+                                        bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                        bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                        if(game.remove(to: Int(node.name!)!)){
+                                            print("MILL BLÅ")
+                                            letBlueRemove = true
+                                        }
+                                    }else{
+                                        moveToRecentNode(placed: bluePlaced, index: index!)
+                                        blueIsPressed = false
                                     }
-                                }else{
-                                    let temp = bluePlaced[index!]
-                                    var nodePos = Int((temp.name?.dropLast())!)!
-                                    nodePos = nodePos-1
-                                    let tempNode = emptyNodes[nodePos]
-                                    bluePlaced[index!].run(SKAction.moveTo(x: tempNode.position.x, duration: 0.0))
-                                    bluePlaced[index!].run(SKAction.moveTo(y: tempNode.position.y, duration: 0.0))
-                                    blueIsPressed = false
+                                }else if(game.getActiveBlues() == 3){
+                                    print("Vi har 3 aktiva blåa")
+                                    let from = Int((bluePlaced[index!].name?.dropLast())!)!
+                                    print("VI ska gå från: " , from)
+                                    if(game.legalMoveFreely(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.BLUE_MOVES)){
+                                        print("Vi ska kunna flytta")
+                                        blueIsPressed = false
+                                        bluePlaced[index!].name = node.name! + "B"
+                                        bluePlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                        bluePlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                        if(game.remove(to: Int(node.name!)!)){
+                                            print("MILL BLÅ")
+                                            letBlueRemove = true
+                                        }
+                                    }else{
+                                        print("If satsen gick fel")
+                                        moveToRecentNode(placed: bluePlaced, index: index!)
+                                        blueIsPressed = false
+                                    }
                                 }
+                            }else{
+                                moveToRecentNode(placed: bluePlaced, index: index!)
+                                blueIsPressed = false
                             }
                         }
                     }
@@ -294,35 +334,73 @@ class GameScene: SKScene {
                             if(node.name == "23"){
                                 let from = Int((redPlaced[index!].name?.dropLast())!)!
                                 if(isNearNodeArr(placed: redPlaced, index: index!, node: node)){
-                                    if(game.legalMove(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.RED_MOVES)){
-                                        redIsPressed = false
-                                        redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
-                                        redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
-                                    }else{
-                                        moveToRecentNode(placed: redPlaced, index: index!)
-                                        redIsPressed = false
-                                        break
+                                    if(game.getActiveReds() >= 4){
+                                        if(game.legalMove(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.RED_MOVES)){
+                                            redIsPressed = false
+                                            redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                            redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                            if(game.remove(to: Int(node.name!)!)){
+                                                print("Mill röd")
+                                                letRedRemove = true
+                                            }
+                                        }else{
+                                            moveToRecentNode(placed: redPlaced, index: index!)
+                                            redIsPressed = false
+                                        }
+                                    }else if(game.getActiveReds() == 3){
+                                        if(game.legalMoveFreely(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.RED_MOVES)){
+                                            redIsPressed = false
+                                            redPlaced[index!].name = node.name! + "R"
+                                            redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                            redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                            if(game.remove(to: Int(node.name!)!)){
+                                                print("Mill röd")
+                                                letRedRemove = true
+                                            }
+                                        }else{
+                                            moveToRecentNode(placed: redPlaced, index: index!)
+                                            redIsPressed = false
+                                        }
                                     }
                                 }else{
                                     redIsPressed = false
                                     moveToRecentNode(placed: redPlaced, index: index!)
-                                    break
                                 }
                             }
                             if(isNearNodeArr(placed: redPlaced, index: index!, node: node)){
-                                if(game.legalMove(To: Int(node.name!)!, From: Int((redPlaced[index!].name?.dropLast())!)!, color: NineMenMorrisRules.RED_MOVES)){
-                                    redIsPressed = false
-                                    redPlaced[index!].name = node.name! + "R"
-                                    redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
-                                    redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
-                                    if(game.remove(to: Int(node.name!)!)){
-                                        print("MILL RÖD")
-                                        letRedRemove = true
+                                if(game.getActiveReds() >= 4){
+                                    if(game.legalMove(To: Int(node.name!)!, From: Int((redPlaced[index!].name?.dropLast())!)!, color: NineMenMorrisRules.RED_MOVES)){
+                                        redIsPressed = false
+                                        redPlaced[index!].name = node.name! + "R"
+                                        redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                        redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                        if(game.remove(to: Int(node.name!)!)){
+                                            print("MILL RÖD")
+                                            letRedRemove = true
+                                        }
+                                    }else{
+                                        moveToRecentNode(placed: redPlaced, index: index!)
+                                        redIsPressed = false
                                     }
-                                }else{
-                                    moveToRecentNode(placed: redPlaced, index: index!)
-                                    redIsPressed = false
+                                }else if(game.getActiveReds() == 3){
+                                    let from = Int((redPlaced[index!].name?.dropLast())!)!
+                                    if(game.legalMoveFreely(To: Int(node.name!)!, From: from, color: NineMenMorrisRules.RED_MOVES)){
+                                        redIsPressed = false
+                                        redPlaced[index!].name = node.name! + "R"
+                                        redPlaced[index!].run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                                        redPlaced[index!].run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                                        if(game.remove(to: Int(node.name!)!)){
+                                            print("Mill röd")
+                                            letRedRemove = true
+                                        }
+                                    }else{
+                                        moveToRecentNode(placed: redPlaced, index: index!)
+                                        redIsPressed = false
+                                    }
                                 }
+                            }else{
+                                redIsPressed = false
+                                moveToRecentNode(placed: redPlaced, index: index!)
                             }
                         }
                     }
@@ -381,8 +459,7 @@ class GameScene: SKScene {
     
     private func moveToRecentNode(placed: [SKSpriteNode], index: Int) -> Void{
         let temp = bluePlaced[index]
-        var nodePos = Int((temp.name?.dropLast())!)!
-        nodePos = nodePos-1
+        let nodePos = Int((temp.name?.dropLast())!)!
         let tempNode = emptyNodes[nodePos]
         placed[index].run(SKAction.moveTo(x: tempNode.position.x, duration: 0.0))
         placed[index].run(SKAction.moveTo(y: tempNode.position.y, duration: 0.0))

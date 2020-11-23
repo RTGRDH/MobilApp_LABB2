@@ -23,6 +23,7 @@ class NineMenMorrisRules {
     private var gameplan : [Int]
     private var bluemarker, redmarker : Int
     private var turn : Int
+    private var activeBlues, activeReds: Int
 
     static let BLUE_MOVES : Int = 1;
     static let RED_MOVES: Int = 2;
@@ -35,9 +36,19 @@ class NineMenMorrisRules {
         gameplan = Array(repeating: 0, count: 25) // zeroes
         bluemarker = 3
         redmarker = 3
+        activeReds = 0
+        activeBlues = 0
         //bluemarker = 9;
         //redmarker = 9;
         turn = NineMenMorrisRules.BLUE_MOVES;
+    }
+    
+    func getActiveBlues() -> Int{
+        return activeBlues
+    }
+    
+    func getActiveReds() -> Int{
+        return activeReds
     }
     
     func whosTurn() -> Int {
@@ -51,6 +62,33 @@ class NineMenMorrisRules {
     func getRedMarkersLeft() -> Int{
         return redmarker
     }
+    
+    func legalMoveFreely(To: Int, From: Int, color: Int) -> Bool{
+        if(color == turn){
+            if(turn == NineMenMorrisRules.RED_MOVES){
+                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                    gameplan[To] = NineMenMorrisRules.RED_MARKER;
+                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
+                    turn = NineMenMorrisRules.BLUE_MOVES;
+                    return true;
+                }else{
+                    return false
+                }
+            }else{
+                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                    gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
+                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
+                    turn = NineMenMorrisRules.RED_MOVES;
+                    return true;
+                }else{
+                    return false
+                }
+            }
+        }else{
+            return false
+        }
+    }
+    
     /**
      * Returns true if a move is successful
      */
@@ -61,6 +99,7 @@ class NineMenMorrisRules {
                     if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
                         gameplan[To] = NineMenMorrisRules.RED_MARKER;
                         self.redmarker-=1;
+                        self.activeReds+=1
                         turn = NineMenMorrisRules.BLUE_MOVES;
                         return true;
                     }
@@ -83,7 +122,8 @@ class NineMenMorrisRules {
                 if (bluemarker > 0) {
                     if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
                         gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
-                        bluemarker-=1;
+                        self.bluemarker-=1;
+                        self.activeBlues+=1
                         turn = NineMenMorrisRules.RED_MOVES;
                         return true;
                     }
@@ -171,6 +211,11 @@ class NineMenMorrisRules {
     func remove(From: Int, color: Int) -> Bool{
         if (gameplan[From] == color) {
             gameplan[From] = NineMenMorrisRules.EMPTY_SPACE;
+            if(color == NineMenMorrisRules.RED_MARKER){
+                activeReds-=1
+            }else if(color == NineMenMorrisRules.BLUE_MARKER){
+                activeBlues-=1
+            }
             return true
         } else{ return false}
     }
