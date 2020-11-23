@@ -25,6 +25,10 @@ class GameScene: SKScene {
     var emptyNodes:[SKNode] = [SKNode]()
     var bluePlayer = SKSpriteNode()
     var redPlayer = SKSpriteNode()
+    let game = NineMenMorrisRules()
+    
+    var blueIsPressed = false
+    var redIsPressed = false
     override func didMove(to view: SKView) {
         bluePlayer = self.childNode(withName: "bluePlayer") as! SKSpriteNode
         redPlayer = self.childNode(withName: "redPlayer") as! SKSpriteNode
@@ -35,27 +39,56 @@ class GameScene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
-            let location = touch.location(in: self)
-            //bluePlayer.run(SKAction.moveBy(x: location.x, y: location.y, duration: 0.2))
-            bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
-            bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+            let touchedNode = self.atPoint(touch.location(in: self))
+            if(game.whosTurn() == 1 && touchedNode.name == "bluePlayer"){
+                let location = touch.location(in: self)
+                blueIsPressed = true
+                bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+            }else if(game.whosTurn() == 2 && touchedNode.name == "redPlayer"){
+                let location = touch.location(in: self)
+                redIsPressed = true
+                redPlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                redPlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+            }
         }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
-            let location = touch.location(in: self)
-            //bluePlayer.run(SKAction.moveBy(x: location.x, y: location.y, duration: 0.2))
-            bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
-            bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+            if(game.whosTurn() == 1){
+                if(blueIsPressed){
+                    let location = touch.location(in: self)
+                    bluePlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                    bluePlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+                }
+            }else if(game.whosTurn() == 2){
+                if(redIsPressed){
+                    let location = touch.location(in: self)
+                    redPlayer.run(SKAction.moveTo(x: location.x, duration: 0.0))
+                    redPlayer.run(SKAction.moveTo(y: location.y, duration: 0.0))
+                }
+            }
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches{
-            print(emptyNodes[1].name!)
-            let location = touch.location(in: self)
-            var node = emptyNodes[1]
-            if(location.x <= (node.position.x+10) && location.x >= (node.position.x-10) && location.y <= (node.position.y+10) && location.y >= (node.position.y-10)){
-                   print("Lyckades")
+            for node in emptyNodes{
+                let location = touch.location(in: self)
+                if(location.x <= (node.position.x+25) && location.x >= (node.position.x-25) && location.y <= (node.position.y+25) && location.y >= (node.position.y-25)){
+                    if(game.legalMove(To: Int(node.name!)!, From: 0, color: game.whosTurn())){
+                        if(game.whosTurn() == 1){
+                            blueIsPressed = false
+                            bluePlayer.run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                            bluePlayer.run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                            //bluePlayer.isPaused = true
+                        }else if(game.whosTurn() == 2){
+                            redIsPressed = false
+                            redPlayer.run(SKAction.moveTo(x: node.position.x, duration: 0.0))
+                            redPlayer.run(SKAction.moveTo(y: node.position.y, duration: 0.0))
+                            //redPlayer.isPaused = true
+                        }
+                    }
+                }
             }
         }
     }

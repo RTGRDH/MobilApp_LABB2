@@ -32,10 +32,14 @@ class NineMenMorrisRules {
     static let RED_MARKER: Int = 5;
 
     init() {
-        gameplan = [25]; // zeroes
+        gameplan = Array(repeating: 0, count: 25) // zeroes
         bluemarker = 9;
         redmarker = 9;
-        turn = NineMenMorrisRules.RED_MOVES;
+        turn = NineMenMorrisRules.BLUE_MOVES;
+    }
+    
+    func whosTurn() -> Int {
+        return turn
     }
 
     /**
@@ -242,6 +246,12 @@ class NineMenMorrisRules {
             return (from == 3 || from == 21 || from == 23);
         default:
             return false;
+        }
+    }
+    
+    func printBoard() -> Void{
+        for n in gameplan{
+            print(n)
         }
     }
     
