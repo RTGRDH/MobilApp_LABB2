@@ -70,7 +70,10 @@ class GameScene: SKScene {
         redMarkersLeft.text = "9"
         blueStart = startPos(x: bluePlayer.position.x, y: bluePlayer.position.y)
         redStart = startPos(x: redPlayer.position.x, y: redPlayer.position.y)
+        loadOldGame()
     }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         game.printBoard()
         print("Active Reds: ", game.getActiveReds())
@@ -78,16 +81,16 @@ class GameScene: SKScene {
         if(game.getRedMarkersLeft() == 0 && game.getBlueMarkersLeft() == 0){
             allPlaced = true
         }
+        guard let touch = touches.first else{
+            return
+        }
+        let location = touch.location(in: self)
+        if(self.atPoint(location).name == "restart")
+        {
+            print("Restarting")
+            startNewGame()
+        }
         if(game.getGameState()){
-            guard let touch = touches.first else{
-                return
-            }
-            let location = touch.location(in: self)
-            if(self.atPoint(location).name == "restart")
-            {
-                print("Restarting")
-                startNewGame()
-            }
             if(letBlueRemove || letRedRemove){
                 if(letBlueRemove){
                     let touchedNode = self.atPoint(touch.location(in: self))
@@ -171,6 +174,8 @@ class GameScene: SKScene {
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(game.winNoMoves(color: NineMenMorrisRules.BLUE_MARKER))
+        print(game.winNoMoves(color: NineMenMorrisRules.RED_MARKER))
         for touch in touches{
             if(!allPlaced){
                 for node in emptyNodes{
@@ -360,8 +365,8 @@ class GameScene: SKScene {
                     }
                 }
             }
-            
         }
+        game.saveGame()
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -460,6 +465,28 @@ class GameScene: SKScene {
         redPlayer.isPaused = false
         moveBlueToStart()
         moveRedToStart()
-        game = NineMenMorrisRules()
+        game.startNewGame()
+    }
+    
+    private func loadOldGame() -> Void{
+        var pos = 0
+        for place in game.getGamePlan(){
+            if(place == 4){//Blå
+                let placed = bluePlayer.copy() as! SKSpriteNode
+                placed.name = String(pos) + "B"
+                addChild(placed)
+                bluePlaced.append(placed)
+                bluePlaced.last?.run(SKAction.moveTo(x: emptyNodes[pos].position.x, duration: 1.0))
+                bluePlaced.last?.run(SKAction.moveTo(y: emptyNodes[pos].position.y, duration: 1.0))
+            }else if(place == 5){//röd
+                let placed = redPlayer.copy() as! SKSpriteNode
+                placed.name = String(pos) + "R"
+                addChild(placed)
+                redPlaced.append(placed)
+                redPlaced.last?.run(SKAction.moveTo(x: emptyNodes[pos].position.x, duration: 1.0))
+                redPlaced.last?.run(SKAction.moveTo(y: emptyNodes[pos].position.y, duration: 1.0))
+            }
+            pos += 1
+        }
     }
 }

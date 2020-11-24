@@ -31,9 +31,16 @@ class NineMenMorrisRules {
     static let EMPTY_SPACE: Int = 0;
     static let BLUE_MARKER : Int = 4;
     static let RED_MARKER: Int = 5;
-    
+        
     private var gameIsActive: Bool
-
+    private let key = "dataForGame"
+    
+    struct nineMen: Codable{
+        var gameplan : [Int]?
+        var bluemarker, redmarker : Int?
+        var turn : Int?
+        var activeBlues, activeReds: Int?
+    }
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
         bluemarker = 4
@@ -45,6 +52,7 @@ class NineMenMorrisRules {
         //redmarker = 9;
         turn = 0
         turn = rand()
+        loadOldGame()
     }
     
     private func rand() -> Int{
@@ -53,7 +61,10 @@ class NineMenMorrisRules {
             return NineMenMorrisRules.RED_MOVES
         }
     }
-
+    
+    func getGamePlan() -> [Int]{
+        return gameplan
+    }
     
     func getGameState() -> Bool{
         return self.gameIsActive
@@ -224,6 +235,27 @@ class NineMenMorrisRules {
             return true
         } else{ return false}
     }
+    /*
+     * Returns true if the selected player can't move anywhere
+     */
+    func winNoMoves(color: Int) -> Bool{
+        if(redmarker <= 0 || bluemarker <= 0){
+            
+        }
+        return false
+        /*
+         * The game board positions
+         *
+         * 03           06           09
+         *     02       05       08
+         *         01   04   07
+         * 24  23  22        10  11  12
+         *         19   16   13
+         *     20       17       14
+         * 21           18           15
+         *
+         */
+    }
 
     /**
      *  Returns true if the selected player have less than three markers left.
@@ -323,16 +355,69 @@ class NineMenMorrisRules {
         print("     ",gameplan[20], " ", gameplan[17], " ", gameplan[14])
         print()
     }
-    /*
-     * The game board positions
-     *
-     * 03           06           09
-     *     02       05       08
-     *         01   04   07
-     * 24  23  22        10  11  12
-     *         19   16   13
-     *     20       17       14
-     * 21           18           15
-     *
-     */
+    
+    func startNewGame(){
+        gameplan = Array(repeating: 0, count: 25) // zeroes
+        bluemarker = 4
+        redmarker = 4
+        activeReds = 0
+        activeBlues = 0
+        gameIsActive = true
+        //bluemarker = 9;
+        //redmarker = 9;
+        turn = 0
+        turn = rand()
+    }
+    
+    func saveGame() -> Void{
+        var toBeSaved = nineMen()
+        toBeSaved.gameplan = gameplan
+        toBeSaved.activeBlues = activeBlues
+        toBeSaved.activeReds = activeReds
+        toBeSaved.bluemarker = bluemarker
+        toBeSaved.redmarker = redmarker
+        toBeSaved.turn = turn
+        save(toBeSaved: toBeSaved)
+    }
+    
+    private func loadOldGame() -> Void{
+        let oldData = getOldData()
+        gameplan = oldData.gameplan!
+        activeReds = oldData.activeReds!
+        activeBlues = oldData.activeBlues!
+        bluemarker = oldData.bluemarker!
+        redmarker = oldData.redmarker!
+        turn = oldData.turn!
+        //if (nineMen{}) == oldData{
+            
+        /*else{
+            gameplan = oldData.gameplan!
+            activeReds = oldData.activeReds!
+            activeBlues = oldData.activeBlues!
+            bluemarker = oldData.bluemarker!
+            redmarker = oldData.redmarker!
+            turn = oldData.turn!
+        }*/
+    }
+    
+    private func save(toBeSaved: nineMen) -> Void{
+        print("Saving data to file")
+        if let encoded = try? JSONEncoder().encode(toBeSaved) {
+            UserDefaults.standard.set(encoded, forKey: key)
+        }else{
+            print("Something went wrong when saving the data")
+        }
+    }
+    private func getOldData() -> nineMen{
+        var result = nineMen()
+        if let data = UserDefaults.standard.data(forKey: key) {
+            if let decodedGame = try? JSONDecoder().decode(nineMen.self, from: data) {
+                result = decodedGame
+            }
+        }else{
+            print("Something went wrong loading old data. Returning empty array")
+        }
+        return result
+    }
+    
 }
