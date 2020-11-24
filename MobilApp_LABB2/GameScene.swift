@@ -361,38 +361,10 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        // Called before each frame is rendered
         if(allPlaced){
             if(game.win(color: NineMenMorrisRules.BLUE_MARKER)){
                 whosTurnLabel.text = "Red Wins!"
-                whosTurnLabel.fontColor = .red
-            }
-            updateUI()
-        }
-        else{
-            updateUI()
-        }
-    }
-    private func updateUI() -> Void{
-        if(allPlaced){
-            bluePlayer.isPaused = true
-            redPlayer.isPaused = true
-            blueMarkersLeft.text = "0"
-            redMarkersLeft.text = "0"
-        }else{
-            blueMarkersLeft.text = String(game.getBlueMarkersLeft())
-            redMarkersLeft.text = String(game.getRedMarkersLeft())
-        }
-        if(!letRedRemove && !letBlueRemove){
-            if(game.whosTurn() == 1){
-                whosTurnLabel.text = "Blue's turn"
-                whosTurnLabel.fontColor = .blue
-            }else{
-                whosTurnLabel.text = "Red's turn"
-                whosTurnLabel.fontColor = .red
-            }
-        }else{
-            if(letRedRemove){
-                whosTurnLabel.text = "Red, remove Blue piece"
                 whosTurnLabel.fontColor = .red
             }else if(game.win(color: NineMenMorrisRules.RED_MARKER)){
                 whosTurnLabel.text = "Blue Wins!"
@@ -403,8 +375,8 @@ class GameScene: SKScene {
         else{
             updateUI()
         }
+
     }
-    
     private func updateUI() -> Void{
         if(game.getGameState()){
             if(allPlaced){
