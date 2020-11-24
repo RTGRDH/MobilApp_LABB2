@@ -23,6 +23,7 @@ class GameScene: SKScene {
      *
      */
     var board = SKSpriteNode(imageNamed: "board")
+    var background = SKSpriteNode(imageNamed: "bakgrund")
     var emptyNodes:[SKNode] = [SKNode]()
     var bluePlayer = SKSpriteNode()
     var redPlayer = SKSpriteNode()
@@ -49,10 +50,12 @@ class GameScene: SKScene {
     var redStart = startPos(x: 0.0, y: 0.0)
     override func didMove(to view: SKView) {
         self.board.size = self.frame.size
+        self.background.size = CGSize(width: frame.maxX, height: frame.maxY)
         bluePlayer = self.childNode(withName: "bluePlayer") as! SKSpriteNode
         redPlayer = self.childNode(withName: "redPlayer") as! SKSpriteNode
         whosTurnLabel = self.childNode(withName: "whosTurn") as! SKLabelNode
         restartLabel = self.childNode(withName: "restart") as! SKLabelNode
+        restartLabel.text=("Restart")
         for node in 1...24
         {
             emptyNodes.append(self.childNode(withName: String(node-1))!)
@@ -68,6 +71,11 @@ class GameScene: SKScene {
         game.printBoard()
         for touch in touches{
             let location = touch.location(in: self)
+            if(self.atPoint(location).name == "restart")
+            {
+                print("Restarting")
+                startNewGame()
+            }
             if(letBlueRemove || letRedRemove){
                 if(letBlueRemove){
                     let touchedNode = self.atPoint(touch.location(in: self))
@@ -408,6 +416,7 @@ class GameScene: SKScene {
                     }
                 }
             }
+            
         }
     }
     override func update(_ currentTime: TimeInterval) {
@@ -426,7 +435,6 @@ class GameScene: SKScene {
             updateUI()
         }
     }
-    
     private func updateUI() -> Void{
         if(allPlaced){
             bluePlayer.isPaused = true
