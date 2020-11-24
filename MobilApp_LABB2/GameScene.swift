@@ -365,7 +365,6 @@ class GameScene: SKScene {
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        // Called before each frame is rendered
         if(allPlaced){
             if(game.win(color: NineMenMorrisRules.BLUE_MARKER)){
                 whosTurnLabel.text = "Red Wins!"
