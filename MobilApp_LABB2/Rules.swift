@@ -31,16 +31,23 @@ class NineMenMorrisRules {
     static let EMPTY_SPACE: Int = 0;
     static let BLUE_MARKER : Int = 4;
     static let RED_MARKER: Int = 5;
+    
+    private var gameIsActive: Bool
 
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
-        bluemarker = 3
-        redmarker = 3
+        bluemarker = 4
+        redmarker = 4
         activeReds = 0
         activeBlues = 0
+        gameIsActive = true
         //bluemarker = 9;
         //redmarker = 9;
         turn = NineMenMorrisRules.BLUE_MOVES;
+    }
+    
+    func getGameState() -> Bool{
+        return self.gameIsActive
     }
     
     func getActiveBlues() -> Int{
@@ -62,33 +69,6 @@ class NineMenMorrisRules {
     func getRedMarkersLeft() -> Int{
         return redmarker
     }
-    
-    func legalMoveFreely(To: Int, From: Int, color: Int) -> Bool{
-        if(color == turn){
-            if(turn == NineMenMorrisRules.RED_MOVES){
-                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
-                    gameplan[To] = NineMenMorrisRules.RED_MARKER;
-                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
-                    turn = NineMenMorrisRules.BLUE_MOVES;
-                    return true;
-                }else{
-                    return false
-                }
-            }else{
-                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
-                    gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
-                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
-                    turn = NineMenMorrisRules.RED_MOVES;
-                    return true;
-                }else{
-                    return false
-                }
-            }
-        }else{
-            return false
-        }
-    }
-    
     /**
      * Returns true if a move is successful
      */
@@ -100,6 +80,14 @@ class NineMenMorrisRules {
                         gameplan[To] = NineMenMorrisRules.RED_MARKER;
                         self.redmarker-=1;
                         self.activeReds+=1
+                        turn = NineMenMorrisRules.BLUE_MOVES;
+                        return true;
+                    }
+                }
+                if(activeReds == 3 && redmarker == 0){
+                    if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                        gameplan[To] = NineMenMorrisRules.RED_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.BLUE_MOVES;
                         return true;
                     }
@@ -124,6 +112,14 @@ class NineMenMorrisRules {
                         gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
                         self.bluemarker-=1;
                         self.activeBlues+=1
+                        turn = NineMenMorrisRules.RED_MOVES;
+                        return true;
+                    }
+                }
+                if(activeBlues == 3 && bluemarker == 0){
+                    if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                        gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.RED_MOVES;
                         return true;
                     }
@@ -221,18 +217,22 @@ class NineMenMorrisRules {
     }
 
     /**
-     *  Returns true if the selected player have less than three markerss left.
+     *  Returns true if the selected player have less than three markers left.
      */
     func win(color: Int) -> Bool{
         var countMarker = 0;
         var count = 0;
         while (count < 23) {
-            if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] != color) {
-                countMarker+=1 }
+            if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] == color) {
+                countMarker+=1
+            }
             count+=1;
         }
         if (bluemarker <= 0 && redmarker <= 0 && countMarker < 3)
-        {return true;}
+        {
+            gameIsActive = false
+            return true
+        }
         else
         {return false;}
     }
