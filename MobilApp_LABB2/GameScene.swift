@@ -146,7 +146,6 @@ class GameScene: SKScene {
         }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         for touch in touches{
             let location = touch.location(in: self)
             if(!allPlaced){
@@ -280,13 +279,16 @@ class GameScene: SKScene {
                                             print("MILL BLÅ")
                                             letBlueRemove = true
                                         }
+                                        break
                                     }else{
                                         moveToRecentNode(placed: bluePlaced, index: index!)
                                         blueIsPressed = false
+                                        break
                                     }
                                 }else{
                                     blueIsPressed = false
                                     moveToRecentNode(placed: bluePlaced, index: index!)
+                                    break
                                 }
                             }
                             if(isNearNodeArr(placed: bluePlaced, index: index!, node: node)){
@@ -324,13 +326,16 @@ class GameScene: SKScene {
                                             print("Mill röd")
                                             letRedRemove = true
                                         }
+                                        break
                                     }else{
                                         moveToRecentNode(placed: redPlaced, index: index!)
                                         redIsPressed = false
+                                        break
                                     }
                                 }else{
                                     redIsPressed = false
                                     moveToRecentNode(placed: redPlaced, index: index!)
+                                    break
                                 }
                             }
                             if(isNearNodeArr(placed: redPlaced, index: index!, node: node)){
@@ -346,7 +351,6 @@ class GameScene: SKScene {
                                     }
                                     break
                                 }else{
-                                    print("Rör sig tillbaka")
                                     moveToRecentNode(placed: redPlaced, index: index!)
                                     redIsPressed = false
                                     break
