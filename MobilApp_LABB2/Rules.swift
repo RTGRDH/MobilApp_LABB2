@@ -249,57 +249,56 @@ class NineMenMorrisRules {
      */
     private func isValidMove(to : Int, from: Int) -> Bool{
         
-        if(self.gameplan[to] != NineMenMorrisRules.EMPTY_SPACE){ return false}
-        
+        if(self.gameplan[to] != NineMenMorrisRules.EMPTY_SPACE){ return false }
         switch (to) {
+        case 0:
+            return (from == 3 || from == 21);
         case 1:
             return (from == 4 || from == 22);
         case 2:
             return (from == 5 || from == 23);
         case 3:
-            return (from == 6 || from == 24);
+            return (from == 0 || from == 6 || from == 4);
         case 4:
-            return (from == 1 || from == 7 || from == 5);
+            return (from == 3 || from == 5 || from == 1 || from == 7);
         case 5:
-            return (from == 4 || from == 6 || from == 2 || from == 8);
+            return (from == 2 || from == 4 || from == 8);
         case 6:
-            return (from == 3 || from == 5 || from == 9);
+            return (from == 3 || from == 9);
         case 7:
             return (from == 4 || from == 10);
         case 8:
             return (from == 5 || from == 11);
         case 9:
-            return (from == 6 || from == 12);
+            return (from == 10 || from == 6 || from == 12);
         case 10:
-            return (from == 11 || from == 7 || from == 13);
+            return (from == 9 || from == 11 || from == 7 || from == 13);
         case 11:
-            return (from == 10 || from == 12 || from == 8 || from == 14);
+            return (from == 10 || from == 14 || from == 8);
         case 12:
-            return (from == 11 || from == 15 || from == 9);
+            return (from == 15 || from == 9);
         case 13:
-            return (from == 16 || from == 10);
+            return (from == 10 || from == 16);
         case 14:
             return (from == 11 || from == 17);
         case 15:
-            return (from == 12 || from == 18);
+            return (from == 12 || from == 16 || from == 18);
         case 16:
-            return (from == 13 || from == 17 || from == 19);
+            return (from == 13 || from == 15 || from == 19 || from == 17);
         case 17:
-            return (from == 14 || from == 16 || from == 20 || from == 18);
+            return (from == 16 || from == 14 || from == 20);
         case 18:
-            return (from == 17 || from == 15 || from == 21);
+            return (from == 15 || from == 21);
         case 19:
             return (from == 16 || from == 22);
         case 20:
             return (from == 17 || from == 23);
         case 21:
-            return (from == 18 || from == 24);
+            return (from == 0 || from == 18 || from == 22);
         case 22:
-            return (from == 1 || from == 19 || from == 23);
+            return (from == 21 || from == 1 || from == 19 || from == 23);
         case 23:
-            return (from == 22 || from == 2 || from == 20 || from == 24);
-        case 24:
-            return (from == 3 || from == 21 || from == 23);
+            return (from == 2 || from == 20 || from == 22);
         default:
             return false;
         }

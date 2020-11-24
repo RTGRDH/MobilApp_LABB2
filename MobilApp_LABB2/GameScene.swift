@@ -69,7 +69,9 @@ class GameScene: SKScene {
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         game.printBoard()
-        if(game.getBlueMarkersLeft() == 0 && game.getRedMarkersLeft() == 0){
+        print("Active Reds: ", game.getActiveReds())
+        print("Active Blues: ", game.getActiveBlues())
+        if(game.getRedMarkersLeft() == 0 && game.getBlueMarkersLeft() == 0){
             allPlaced = true
         }
         if(game.getGameState()){
@@ -117,13 +119,13 @@ class GameScene: SKScene {
                     }
                 }else{
                     let touchedNode = self.atPoint(touch.location(in: self))
-                    if(game.whosTurn() == 1 && touchedNode.name?.dropFirst(2) == "B" || (game.whosTurn() == 1 && touchedNode.name?.dropFirst() == "B")){
+                    if((game.whosTurn() == 1 && touchedNode.name?.dropFirst(2) == "B") || (game.whosTurn() == 1 && touchedNode.name?.dropFirst() == "B")){
                         blueIndex = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)!
                         blueIsPressed = true
                         let index = bluePlaced.firstIndex(of: touchedNode as! SKSpriteNode)
                         bluePlaced[index!].run(SKAction.moveTo(x: location.x, duration: 0.0))
                         bluePlaced[index!].run(SKAction.moveTo(y: location.y, duration: 0.0))
-                    }else if(game.whosTurn() == 2 && touchedNode.name?.dropFirst(2) == "R" || (game.whosTurn() == 2 && touchedNode.name?.dropFirst() == "R")){
+                    }else if((game.whosTurn() == 2 && touchedNode.name?.dropFirst(2) == "R") || (game.whosTurn() == 2 && touchedNode.name?.dropFirst() == "R")){
                         redIndex = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)!
                         redIsPressed = true
                         let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
@@ -335,6 +337,7 @@ class GameScene: SKScene {
                                     }
                                     break
                                 }else{
+                                    print("Rör sig tillbaka")
                                     moveToRecentNode(placed: redPlaced, index: index!)
                                     redIsPressed = false
                                     break
