@@ -43,8 +43,17 @@ class NineMenMorrisRules {
         gameIsActive = true
         //bluemarker = 9;
         //redmarker = 9;
-        turn = NineMenMorrisRules.BLUE_MOVES;
+        turn = 0
+        turn = rand()
     }
+    
+    private func rand() -> Int{
+        let random = Int.random(in: 0...1)
+        if(random == 0) { return NineMenMorrisRules.BLUE_MOVES }else{
+            return NineMenMorrisRules.RED_MOVES
+        }
+    }
+
     
     func getGameState() -> Bool{
         return self.gameIsActive
