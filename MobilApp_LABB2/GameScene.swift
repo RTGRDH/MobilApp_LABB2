@@ -33,6 +33,7 @@ class GameScene: SKScene {
     var bluePlaced: [SKSpriteNode] = [SKSpriteNode]()
     var redPlaced: [SKSpriteNode] = [SKSpriteNode]()
     var whosTurnLabel = SKLabelNode()
+    var restartLabel = SKLabelNode()
 
     var letBlueRemove = false
     var letRedRemove = false
@@ -51,6 +52,7 @@ class GameScene: SKScene {
         bluePlayer = self.childNode(withName: "bluePlayer") as! SKSpriteNode
         redPlayer = self.childNode(withName: "redPlayer") as! SKSpriteNode
         whosTurnLabel = self.childNode(withName: "whosTurn") as! SKLabelNode
+        restartLabel = self.childNode(withName: "restart") as! SKLabelNode
         for node in 1...24
         {
             emptyNodes.append(self.childNode(withName: String(node-1))!)
