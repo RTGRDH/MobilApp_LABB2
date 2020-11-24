@@ -31,16 +31,23 @@ class NineMenMorrisRules {
     static let EMPTY_SPACE: Int = 0;
     static let BLUE_MARKER : Int = 4;
     static let RED_MARKER: Int = 5;
+    
+    private var gameIsActive: Bool
 
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
-        bluemarker = 3
-        redmarker = 3
+        bluemarker = 4
+        redmarker = 4
         activeReds = 0
         activeBlues = 0
+        gameIsActive = true
         //bluemarker = 9;
         //redmarker = 9;
         turn = NineMenMorrisRules.BLUE_MOVES;
+    }
+    
+    func getGameState() -> Bool{
+        return self.gameIsActive
     }
     
     func getActiveBlues() -> Int{
@@ -62,33 +69,6 @@ class NineMenMorrisRules {
     func getRedMarkersLeft() -> Int{
         return redmarker
     }
-    
-    func legalMoveFreely(To: Int, From: Int, color: Int) -> Bool{
-        if(color == turn){
-            if(turn == NineMenMorrisRules.RED_MOVES){
-                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
-                    gameplan[To] = NineMenMorrisRules.RED_MARKER;
-                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
-                    turn = NineMenMorrisRules.BLUE_MOVES;
-                    return true;
-                }else{
-                    return false
-                }
-            }else{
-                if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
-                    gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
-                    gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
-                    turn = NineMenMorrisRules.RED_MOVES;
-                    return true;
-                }else{
-                    return false
-                }
-            }
-        }else{
-            return false
-        }
-    }
-    
     /**
      * Returns true if a move is successful
      */
@@ -100,6 +80,14 @@ class NineMenMorrisRules {
                         gameplan[To] = NineMenMorrisRules.RED_MARKER;
                         self.redmarker-=1;
                         self.activeReds+=1
+                        turn = NineMenMorrisRules.BLUE_MOVES;
+                        return true;
+                    }
+                }
+                if(activeReds == 3 && redmarker == 0){
+                    if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                        gameplan[To] = NineMenMorrisRules.RED_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.BLUE_MOVES;
                         return true;
                     }
@@ -124,6 +112,14 @@ class NineMenMorrisRules {
                         gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
                         self.bluemarker-=1;
                         self.activeBlues+=1
+                        turn = NineMenMorrisRules.RED_MOVES;
+                        return true;
+                    }
+                }
+                if(activeBlues == 3 && bluemarker == 0){
+                    if (gameplan[To] == NineMenMorrisRules.EMPTY_SPACE) {
+                        gameplan[To] = NineMenMorrisRules.BLUE_MARKER;
+                        gameplan[From] = NineMenMorrisRules.EMPTY_SPACE
                         turn = NineMenMorrisRules.RED_MOVES;
                         return true;
                     }
@@ -221,18 +217,22 @@ class NineMenMorrisRules {
     }
 
     /**
-     *  Returns true if the selected player have less than three markerss left.
+     *  Returns true if the selected player have less than three markers left.
      */
     func win(color: Int) -> Bool{
         var countMarker = 0;
         var count = 0;
         while (count < 23) {
-            if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] != color) {
-                countMarker+=1 }
+            if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] == color) {
+                countMarker+=1
+            }
             count+=1;
         }
         if (bluemarker <= 0 && redmarker <= 0 && countMarker < 3)
-        {return true;}
+        {
+            gameIsActive = false
+            return true
+        }
         else
         {return false;}
     }
@@ -249,57 +249,56 @@ class NineMenMorrisRules {
      */
     private func isValidMove(to : Int, from: Int) -> Bool{
         
-        if(self.gameplan[to] != NineMenMorrisRules.EMPTY_SPACE){ return false}
-        
+        if(self.gameplan[to] != NineMenMorrisRules.EMPTY_SPACE){ return false }
         switch (to) {
+        case 0:
+            return (from == 3 || from == 21);
         case 1:
             return (from == 4 || from == 22);
         case 2:
             return (from == 5 || from == 23);
         case 3:
-            return (from == 6 || from == 24);
+            return (from == 0 || from == 6 || from == 4);
         case 4:
-            return (from == 1 || from == 7 || from == 5);
+            return (from == 3 || from == 5 || from == 1 || from == 7);
         case 5:
-            return (from == 4 || from == 6 || from == 2 || from == 8);
+            return (from == 2 || from == 4 || from == 8);
         case 6:
-            return (from == 3 || from == 5 || from == 9);
+            return (from == 3 || from == 9);
         case 7:
             return (from == 4 || from == 10);
         case 8:
             return (from == 5 || from == 11);
         case 9:
-            return (from == 6 || from == 12);
+            return (from == 10 || from == 6 || from == 12);
         case 10:
-            return (from == 11 || from == 7 || from == 13);
+            return (from == 9 || from == 11 || from == 7 || from == 13);
         case 11:
-            return (from == 10 || from == 12 || from == 8 || from == 14);
+            return (from == 10 || from == 14 || from == 8);
         case 12:
-            return (from == 11 || from == 15 || from == 9);
+            return (from == 15 || from == 9);
         case 13:
-            return (from == 16 || from == 10);
+            return (from == 10 || from == 16);
         case 14:
             return (from == 11 || from == 17);
         case 15:
-            return (from == 12 || from == 18);
+            return (from == 12 || from == 16 || from == 18);
         case 16:
-            return (from == 13 || from == 17 || from == 19);
+            return (from == 13 || from == 15 || from == 19 || from == 17);
         case 17:
-            return (from == 14 || from == 16 || from == 20 || from == 18);
+            return (from == 16 || from == 14 || from == 20);
         case 18:
-            return (from == 17 || from == 15 || from == 21);
+            return (from == 15 || from == 21);
         case 19:
             return (from == 16 || from == 22);
         case 20:
             return (from == 17 || from == 23);
         case 21:
-            return (from == 18 || from == 24);
+            return (from == 0 || from == 18 || from == 22);
         case 22:
-            return (from == 1 || from == 19 || from == 23);
+            return (from == 21 || from == 1 || from == 19 || from == 23);
         case 23:
-            return (from == 22 || from == 2 || from == 20 || from == 24);
-        case 24:
-            return (from == 3 || from == 21 || from == 23);
+            return (from == 2 || from == 20 || from == 22);
         default:
             return false;
         }
