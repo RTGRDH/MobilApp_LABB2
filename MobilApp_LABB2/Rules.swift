@@ -157,14 +157,17 @@ class NineMenMorrisRules {
      */
     func remove(to: Int) -> Bool {
 
-        if ((to == 1 || to == 4 || to == 7) && gameplan[1] == gameplan[4]
-                && gameplan[4] == gameplan[7]) {
+        if ((to == 0 || to == 3 || to == 6) && gameplan[0] == gameplan[3]
+                && gameplan[3] == gameplan[6]) {
+            return true;
+        } else if ((to == 1 || to == 4 || to == 7)
+                && gameplan[1] == gameplan[4] && gameplan[4] == gameplan[7]) {
             return true;
         } else if ((to == 2 || to == 5 || to == 8)
                 && gameplan[2] == gameplan[5] && gameplan[5] == gameplan[8]) {
             return true;
-        } else if ((to == 3 || to == 6 || to == 9)
-                && gameplan[3] == gameplan[6] && gameplan[6] == gameplan[9]) {
+        } else if ((to == 6 || to == 9 || to == 12)
+                && gameplan[6] == gameplan[9] && gameplan[9] == gameplan[12]) {
             return true;
         } else if ((to == 7 || to == 10 || to == 13)
                 && gameplan[7] == gameplan[10] && gameplan[10] == gameplan[13]) {
@@ -172,8 +175,8 @@ class NineMenMorrisRules {
         } else if ((to == 8 || to == 11 || to == 14)
                 && gameplan[8] == gameplan[11] && gameplan[11] == gameplan[14]) {
             return true;
-        } else if ((to == 9 || to == 12 || to == 15)
-                && gameplan[9] == gameplan[12] && gameplan[12] == gameplan[15]) {
+        } else if ((to == 12 || to == 15 || to == 18)
+                && gameplan[12] == gameplan[15] && gameplan[15] == gameplan[18]) {
             return true;
         } else if ((to == 13 || to == 16 || to == 19)
                 && gameplan[13] == gameplan[16] && gameplan[16] == gameplan[19]) {
@@ -181,8 +184,8 @@ class NineMenMorrisRules {
         } else if ((to == 14 || to == 17 || to == 20)
                 && gameplan[14] == gameplan[17] && gameplan[17] == gameplan[20]) {
             return true;
-        } else if ((to == 15 || to == 18 || to == 21)
-                && gameplan[15] == gameplan[18] && gameplan[18] == gameplan[21]) {
+        } else if ((to == 0 || to == 21 || to == 18)
+                && gameplan[0] == gameplan[21] && gameplan[21] == gameplan[18]) {
             return true;
         } else if ((to == 1 || to == 22 || to == 19)
                 && gameplan[1] == gameplan[22] && gameplan[22] == gameplan[19]) {
@@ -190,20 +193,17 @@ class NineMenMorrisRules {
         } else if ((to == 2 || to == 23 || to == 20)
                 && gameplan[2] == gameplan[23] && gameplan[23] == gameplan[20]) {
             return true;
-        } else if ((to == 3 || to == 24 || to == 21)
-                && gameplan[3] == gameplan[24] && gameplan[24] == gameplan[21]) {
+        } else if ((to == 21 || to == 22 || to == 23)
+                && gameplan[21] == gameplan[22] && gameplan[22] == gameplan[23]) {
             return true;
-        } else if ((to == 22 || to == 23 || to == 24)
-                && gameplan[22] == gameplan[23] && gameplan[23] == gameplan[24]) {
+        } else if ((to == 3 || to == 4 || to == 5)
+                && gameplan[3] == gameplan[4] && gameplan[4] == gameplan[5]) {
             return true;
-        } else if ((to == 4 || to == 5 || to == 6)
-                && gameplan[4] == gameplan[5] && gameplan[5] == gameplan[6]) {
+        } else if ((to == 9 || to == 10 || to == 11)
+                && gameplan[9] == gameplan[10] && gameplan[10] == gameplan[11]) {
             return true;
-        } else if ((to == 10 || to == 11 || to == 12)
-                && gameplan[10] == gameplan[11] && gameplan[11] == gameplan[12]) {
-            return true;
-        } else if ((to == 16 || to == 17 || to == 18)
-                && gameplan[16] == gameplan[17] && gameplan[17] == gameplan[18]) {
+        } else if ((to == 15 || to == 16 || to == 17)
+                && gameplan[15] == gameplan[16] && gameplan[16] == gameplan[17]) {
             return true;
         }
         return false;
