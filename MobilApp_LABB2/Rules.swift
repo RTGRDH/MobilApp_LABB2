@@ -309,21 +309,18 @@ class NineMenMorrisRules {
      *  Returns true if the selected player have less than three markers left.
      */
     func win(color: Int) -> Bool{
-        var countMarker = 0;
-        var count = 0;
-        while (count < 24) {
-            if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] == color) {
-                countMarker+=1
+        if(color == NineMenMorrisRules.BLUE_MARKER){
+            if(activeBlues < 3){
+                gameIsActive = false
+                return true
             }
-            count+=1;
+        }else{
+            if(activeReds < 3){
+                gameIsActive = false
+                return true
+            }
         }
-        if (bluemarker <= 0 && redmarker <= 0 && countMarker < 3)
-        {
-            gameIsActive = false
-            return true
-        }
-        else
-        {return false;}
+        return false
     }
 
     /**
