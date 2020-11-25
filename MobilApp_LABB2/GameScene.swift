@@ -89,6 +89,7 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         if(self.atPoint(location).name == "restart")
         {
+            restartLabel.fontColor = .black
             print("Restarting")
             startNewGame()
         }
@@ -99,6 +100,7 @@ class GameScene: SKScene {
                     if(touchedNode.name?.dropFirst(2) == "R" || touchedNode.name?.dropFirst() == "R"){
                         let remove = Int(touchedNode.name!.dropLast())!
                         if(game.remove(From: remove, color: NineMenMorrisRules.RED_MARKER)){
+                            print("removed")
                             let index = redPlaced.firstIndex(of: touchedNode as! SKSpriteNode)
                             let removedPiece = redPlaced[index!]
                             removedPiece.removeFromParent()
@@ -176,6 +178,7 @@ class GameScene: SKScene {
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        restartLabel.fontColor = .white
         for touch in touches{
             if(!allPlaced){
                 for node in emptyNodes{
@@ -366,7 +369,7 @@ class GameScene: SKScene {
                 }
             }
         }
-        noMoves()
+        //noMoves()
         game.saveGame()
     }
     override func update(_ currentTime: TimeInterval) {
@@ -400,6 +403,7 @@ class GameScene: SKScene {
         }
         if(moves == game.getActiveReds()){
             redNoMoves = true
+            return
         }
         moves = 0
         for piece in bluePlaced{
@@ -480,14 +484,13 @@ class GameScene: SKScene {
     }
     
     private func startNewGame() -> Void{
-        blueMarkersLeft.text = "9"
-        redMarkersLeft.text = "9"
         for blue in bluePlaced{
             blue.removeFromParent()
         }
         for red in redPlaced{
             red.removeFromParent()
         }
+        allPlaced = false
         bluePlaced.removeAll()
         redPlaced.removeAll()
         bluePlayer.isPaused = false
@@ -495,9 +498,14 @@ class GameScene: SKScene {
         moveBlueToStart()
         moveRedToStart()
         game.startNewGame()
+        redNoMoves = false
+        blueNoMoves = false
+        blueMarkersLeft.text = String(game.getBlueMarkersLeft())
+        redMarkersLeft.text = String(game.getRedMarkersLeft())
     }
     
     private func loadOldGame() -> Void{
+        game.oldGame()
         var pos = 0
         for place in game.getGamePlan(){
             if(place == 4){//Blå

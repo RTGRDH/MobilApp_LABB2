@@ -43,7 +43,7 @@ class NineMenMorrisRules {
     }
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
-        bluemarker = 6
+        bluemarker = 4
         redmarker = 4
         activeReds = 0
         activeBlues = 0
@@ -52,7 +52,6 @@ class NineMenMorrisRules {
         //redmarker = 9;
         turn = 0
         turn = rand()
-        loadOldGame()
     }
     
     private func rand() -> Int{
@@ -251,6 +250,7 @@ class NineMenMorrisRules {
          * 21           18           15
          *
          */
+        
         switch (from) {
         case 0:
             return (gameplan[3] == color && gameplan[21] == color)
@@ -311,7 +311,7 @@ class NineMenMorrisRules {
     func win(color: Int) -> Bool{
         var countMarker = 0;
         var count = 0;
-        while (count < 23) {
+        while (count < 24) {
             if (gameplan[count] != NineMenMorrisRules.EMPTY_SPACE && gameplan[count] == color) {
                 countMarker+=1
             }
@@ -428,6 +428,10 @@ class NineMenMorrisRules {
         save(toBeSaved: toBeSaved)
     }
     
+    func oldGame() -> Void{
+        loadOldGame()
+    }
+    
     private func loadOldGame() -> Void{
         let oldData = getOldData()
         gameplan = oldData.gameplan!
@@ -436,6 +440,7 @@ class NineMenMorrisRules {
         bluemarker = oldData.bluemarker!
         redmarker = oldData.redmarker!
         turn = oldData.turn!
+        gameIsActive = true
         //if (nineMen{}) == oldData{
             
         /*else{
