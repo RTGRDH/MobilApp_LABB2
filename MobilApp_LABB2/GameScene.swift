@@ -41,6 +41,8 @@ class GameScene: SKScene {
     var blueIsPressed = false
     var redIsPressed = false
     var allPlaced = false
+    var blueNoMoves = false
+    var redNoMoves = false
     
     var blueIndex = 25
     var redIndex = 25
@@ -174,8 +176,6 @@ class GameScene: SKScene {
         }
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print(game.winNoMoves(color: NineMenMorrisRules.BLUE_MARKER))
-        print(game.winNoMoves(color: NineMenMorrisRules.RED_MARKER))
         for touch in touches{
             if(!allPlaced){
                 for node in emptyNodes{
@@ -366,25 +366,54 @@ class GameScene: SKScene {
                 }
             }
         }
+        noMoves()
         game.saveGame()
     }
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         if(allPlaced){
-            if(game.win(color: NineMenMorrisRules.BLUE_MARKER)){
+            if(game.win(color: NineMenMorrisRules.BLUE_MARKER) || blueNoMoves){
                 whosTurnLabel.text = "Red Wins!"
                 whosTurnLabel.fontColor = .red
-            }else if(game.win(color: NineMenMorrisRules.RED_MARKER)){
+            }else if(game.win(color: NineMenMorrisRules.RED_MARKER) || redNoMoves){
                 whosTurnLabel.text = "Blue Wins!"
                 whosTurnLabel.fontColor = .blue
             }
-            updateUI()
+            if(!blueNoMoves && !redNoMoves){
+                updateUI()
+            }
         }
         else{
             updateUI()
         }
 
     }
+    
+    private func noMoves() -> Void{
+        var moves = 0
+        for piece in redPlaced{
+            if(game.winNoMoves(color: NineMenMorrisRules.BLUE_MARKER, from: Int(piece.name!.dropLast())!)){
+                moves += 1
+            }else{
+                break
+            }
+        }
+        if(moves == game.getActiveReds()){
+            redNoMoves = true
+        }
+        moves = 0
+        for piece in bluePlaced{
+            if(game.winNoMoves(color: NineMenMorrisRules.RED_MARKER, from: Int(piece.name!.dropLast())!)){
+                moves += 1
+            }else{
+                break
+            }
+        }
+        if(moves == game.getActiveBlues()){
+            blueNoMoves = true
+        }
+    }
+    
     private func updateUI() -> Void{
         if(game.getGameState()){
             if(allPlaced){

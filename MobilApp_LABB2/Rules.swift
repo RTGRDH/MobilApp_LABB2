@@ -43,7 +43,7 @@ class NineMenMorrisRules {
     }
     init() {
         gameplan = Array(repeating: 0, count: 25) // zeroes
-        bluemarker = 4
+        bluemarker = 6
         redmarker = 4
         activeReds = 0
         activeBlues = 0
@@ -238,11 +238,7 @@ class NineMenMorrisRules {
     /*
      * Returns true if the selected player can't move anywhere
      */
-    func winNoMoves(color: Int) -> Bool{
-        if(redmarker <= 0 || bluemarker <= 0){
-            
-        }
-        return false
+    func winNoMoves(color: Int, from: Int) -> Bool{
         /*
          * The game board positions
          *
@@ -255,6 +251,58 @@ class NineMenMorrisRules {
          * 21           18           15
          *
          */
+        switch (from) {
+        case 0:
+            return (gameplan[3] == color && gameplan[21] == color)
+        case 1:
+            return (gameplan[4] == color && gameplan[22] == color)
+        case 2:
+            return (gameplan[5] == color && gameplan[23] == color)
+        case 3:
+            return (gameplan[0] == color && gameplan[6] == color && gameplan[4] == color)
+        case 4:
+            return (gameplan[3] == color && gameplan[5] == color && gameplan[1] == color && gameplan[7] == color)
+        case 5:
+            return (gameplan[2] == color && gameplan[4] == color && gameplan[8] == color)
+        case 6:
+            return (gameplan[3] == color && gameplan[9] == color)
+        case 7:
+            return (gameplan[4] == color && gameplan[10] == color)
+        case 8:
+            return (gameplan[5] == color && gameplan[11] == color)
+        case 9:
+            return (gameplan[10] == color && gameplan[6] == color && gameplan[12] == color)
+        case 10:
+            return (gameplan[9] == color && gameplan[11] == color && gameplan[7] == color && gameplan[13] == color)
+        case 11:
+            return (gameplan[10] == color && gameplan[14] == color && gameplan[8] == color)
+        case 12:
+            return (gameplan[15] == color && gameplan[9] == color)
+        case 13:
+            return (gameplan[10] == color && gameplan[16] == color)
+        case 14:
+            return (gameplan[11] == color && gameplan[17] == color)
+        case 15:
+            return (gameplan[12] == color && gameplan[16] == color && gameplan[18] == color)
+        case 16:
+            return (gameplan[13] == color && gameplan[15] == color && gameplan[19] == color && gameplan[17] == color)
+        case 17:
+            return (gameplan[16] == color && gameplan[14] == color && gameplan[20] == color)
+        case 18:
+            return (gameplan[15] == color && gameplan[21] == color)
+        case 19:
+            return (gameplan[16] == color && gameplan[22] == color)
+        case 20:
+            return (gameplan[17] == color && gameplan[23] == color)
+        case 21:
+            return (gameplan[0] == color && gameplan[18] == color && gameplan[22] == color)
+        case 22:
+            return (gameplan[21] == color && gameplan[1] == color && gameplan[19] == color && gameplan[23] == color)
+        case 23:
+            return (gameplan[2] == color && gameplan[20] == color && gameplan[22] == color)
+        default:
+            return false;
+        }
     }
 
     /**
